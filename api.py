@@ -3,6 +3,8 @@ from fastapi.responses import JSONResponse
 from influxdb_client import InfluxDBClient
 from influxdb_client.client.write_api import SYNCHRONOUS
 import json
+from fastapi.openapi.utils import get_openapi
+
 
 import secret
 # Initialize FastAPI
@@ -108,3 +110,18 @@ async def get_bus_location(lat: float, lon: float):
     response.media_type = "application/json"
     response.content = json.dumps(buses_location, indent=20)
     return response
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="Bus Tracker API Doc",
+        version="1.0",
+        description="This is the API documentation for the project 'Bus Tracker API Doc'.",
+        routes=app.routes,
+    )
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
+
