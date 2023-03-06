@@ -72,6 +72,15 @@ services:
     environment:
       INFLUXDB_HOST: influxdb
       KAFKA_SERVER: kafka:9092
+  
+  api:
+    build: ./api
+    ports:
+      - "80:80"
+    networks:
+      - my-network
+    depends_on:
+      - kafka-influxdb
 
 networks:
   my-network:
