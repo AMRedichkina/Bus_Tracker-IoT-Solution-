@@ -5,22 +5,22 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import json
 from fastapi.openapi.utils import get_openapi
 
-
 import secret
 # Initialize FastAPI
 app = FastAPI()
 
 # Initialize InfluxDB client
 influxdb_client = InfluxDBClient(url=secret.INFLUX_URL,
-                                 token=secret.INFLUX_TOKEN,
+                                 username=secret.INFLUX_USERNAME,
+                                 password=secret.INFLUX_PASSWORD,
                                  org=secret.INFLUX_ORG)
 
 # Endpoint to show the location of all buses
-#http://localhost:8000/buses/location
+#http://localhost:80/buses/location
 @app.get("/buses/location")
 async def get_bus_location():
     # Query InfluxDB for bus locations
-    query = f'from(bucket:"{secret.INFLUX_BUCKET}") |> range(start: -20h) |> filter(fn: (r) => r["_measurement"] == "All_buses")'
+    query = f'from(bucket:"{secret.INFLUX_BUCKET}") |> range(start: -24h) |> filter(fn: (r) => r["_measurement"] == "All_buses")'
     result = influxdb_client.query_api().query(query)
     
     # Extract bus location data from InfluxDB result
@@ -40,7 +40,7 @@ async def get_bus_location():
     response.content = json.dumps(buses_location, indent=20)
     return response
 
-#http://localhost:8000/buses/near?lat=60.1837&lon=24.9579
+#http://localhost:80/buses/near?lat=60.1837&lon=24.9579
 @app.get("/buses/near")
 async def get_bus_location(lat: float, lon: float):
     # Calculate bounding box coordinates
@@ -50,7 +50,7 @@ async def get_bus_location(lat: float, lon: float):
     # Query InfluxDB to get all records with latitude and longitude in the range
     query1 = (
         f'from(bucket:"{secret.INFLUX_BUCKET}") '
-        f'|> range(start: -1d) '
+        f'|> range(start: -3m) '
         f'|> filter(fn: (r) => r["_measurement"] == "All_buses" and '
         f'((r["_field"] == "lat" and r["_value"] >= {lat_min} and r["_value"] < {lat_max}) or '
         f'(r["_field"] == "lon" and r["_value"] >= {lon_min} and r["_value"] < {lon_max}))) '
@@ -82,7 +82,7 @@ async def get_bus_location(lat: float, lon: float):
     # Query InfluxDB again to get all records with fields "next_stop" and "bus_id" from the buses_id list
     query2 = (
         f'from(bucket:"{secret.INFLUX_BUCKET}") '
-        f'|> range(start: -1d) '
+        f'|> range(start: -3m) '
         f'|> filter(fn: (r) => r["_measurement"] == "All_buses" and '
         f'r["_field"] == "next_stop" and r["bus_id"] =~ /{ "|".join(buses_id) }$/ ) '
     )
@@ -124,4 +124,3 @@ def custom_openapi():
     return app.openapi_schema
 
 app.openapi = custom_openapi
-
