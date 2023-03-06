@@ -1,0 +1,78 @@
+version: '3.7'
+
+services:
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    tmpfs:
+      - "/datalog"
+    networks:
+      - my-network
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=zookeeper:2888:3888
+      ZOOKEEPER_REMOVE_4LETTER_WORDS: 'yes'
+      ZOO_CLEAN_DATA_DIR_ON_START: 'yes'
+      ZOO_ENABLE_AUTH: "true"
+    ports:
+      - "2181:2181"
+    restart: always
+
+  kafka:
+    image: bitnami/kafka:latest
+    networks:
+      - my-network
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://:29092,PLAINTEXT_HOST://:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CREATE_TOPICS: "bus_data_mqtt"
+    restart: always
+
+  mqtt-kafka:
+    build: ./mqtt-kafka
+    networks:
+      - my-network
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_SERVER: kafka:9092
+
+  influxdb:
+    image: influxdb:2.6
+    networks:
+      - my-network
+    depends_on:
+      - mqtt-kafka
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin1
+      DOCKER_INFLUXDB_INIT_PASSWORD: admin1admin1
+      DOCKER_INFLUXDB_INIT_ORG: bus_group
+      DOCKER_INFLUXDB_INIT_BUCKET: bus_tracker
+
+  kafka-influxdb:
+    build: ./kafka-influxdb
+    networks:
+      - my-network
+    depends_on:
+      - influxdb
+      - mqtt-kafka
+    environment:
+      INFLUXDB_HOST: influxdb
+      KAFKA_SERVER: kafka:9092
+
+networks:
+  my-network:
+    driver: bridge
