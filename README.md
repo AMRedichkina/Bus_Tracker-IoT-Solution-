@@ -2,8 +2,6 @@
   
 ### 1. About  
 The purpose of this project is to create a program that transmits data via API about the location of all buses in Finland and the location of all buses nearby, as well as their next stops.   
-  
-The telemetry data is obtained from a publicly available MQTT server. The program receives data from the MQTT server, transmits it to Kafka, transfers it to the InfluxDB, and then uses the Fast API over the HTTP protocol to make the data available to the user.  
 
 The program uses the real-time data from https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/ to provide information about the location of buses in Finland.  
   
