@@ -25,7 +25,7 @@ Run the program using the command:
   
 ```python
 # Clone the repository:
-git clone https://github.com/username/project.git
+git clone git@github.com:AMRedichkina/Bus_Tracker.git
 
 # Navigate to the project directory:
 cd Bus_Tracker/
