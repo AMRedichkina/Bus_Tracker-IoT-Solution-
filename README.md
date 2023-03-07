@@ -13,10 +13,14 @@ The program uses a robust and reliable system to collect, process, and deliver r
 3. Kafka transfers the data to InfluxDB, which is a high-performance time-series database that can handle large volumes of data and has fast write and query capabilities.  
 4. Finally, the data is made available to the user via Fast API over the HTTP protocol, which is a modern, fast, and lightweight web framework that allows for easy and efficient communication between the server and the client.  
   
-Illustration of the work of the services:  
-![Scheme](assets/img.png)
-![Demonstration of the program:](assets/demonstration1.gif)
-![Demonstration of the program:](assets/demonstration3.gif)
+### Illustration of the work of the services:  
+  
+![Scheme](assets/image.png)  
+  
+![Demonstration of the program:](assets/demonstration1.gif)  
+  
+![Demonstration of the program:](assets/demonstration3.gif)  
+  
   
 ### 3. Launch  
   
