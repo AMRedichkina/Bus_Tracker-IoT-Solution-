@@ -31,9 +31,7 @@ git clone https://github.com/username/project.git
 cd Bus_Tracker/
 
 # Create images:
-docker build -t api:latest -f api/Dockerfile .
-docker build -t mqtt-kafka:latest -f mqtt-kafka/Dockerfile .
-docker build -t kafka-influxdb:latest -f kafka-influxdb/Dockerfile .
+docker-compose build
 
 # Run the docker-compose command to start the application:
 docker-compose up
