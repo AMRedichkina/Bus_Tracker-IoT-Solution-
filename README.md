@@ -7,7 +7,9 @@ The program uses the real-time data from https://digitransit.fi/en/developers/ap
   
 ### 2. Implementation  
 The program uses a robust and reliable system to collect, process, and deliver real-time data about the location of all buses in Finland and buses nearby, as well as their next stops. Here's how the program works:    
+
   
+![Scheme](assets/image.png)  
 1. The program receives data from the MQTT server, which is a messaging protocol that is widely used in IoT applications to transmit data between devices.  
 2. The program then transmits the data to Kafka, which is a distributed streaming platform that provides high-throughput, low-latency messaging services.  
 3. Kafka transfers the data to InfluxDB, which is a high-performance time-series database that can handle large volumes of data and has fast write and query capabilities.  
@@ -15,7 +17,7 @@ The program uses a robust and reliable system to collect, process, and deliver r
   
 ### Illustration of the work of the services:  
   
-![Scheme](assets/image.png)  
+
   
 ![Demonstration of the program:](assets/demonstration1.gif)  
   
