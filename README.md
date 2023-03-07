@@ -30,7 +30,7 @@ Run the program using the command:
 git clone https://github.com/username/project.git
 
 # Navigate to the project directory:
-cd Bus_Tracker_App/
+cd Bus_Tracker/
 
 # Create images:
 docker build -t api:latest -f api/Dockerfile .
@@ -41,6 +41,6 @@ docker build -t kafka-influxdb:latest -f kafka-influxdb/Dockerfile .
 docker-compose up
 ```
   
-## 4. Contributing  
+### 4. Contributing  
   
 Contributions to this project are welcome. If you notice a bug or have a feature request, please open an issue on the repository. If you would like to contribute code, please fork the repository and submit a pull request with your changes.  
