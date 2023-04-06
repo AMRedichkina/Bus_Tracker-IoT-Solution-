@@ -3,6 +3,7 @@ import logging
 from influxdb_client import InfluxDBClient
 from confluent_kafka import Consumer, KafkaError
 import secret
+import time
 
 # Set up logging
 logging.basicConfig(level=logging.INFO,
@@ -112,7 +113,8 @@ def consume_messages(consumer, influxdb_write_api):
     Consume messages from Kafka and write to InfluxDB.
     """
     while True:
-        msg = consumer.poll(20.0)
+        time.sleep(10)
+        msg = consumer.poll(30.0)
         if msg is None:
             continue
 

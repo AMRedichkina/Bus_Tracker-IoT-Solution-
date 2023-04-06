@@ -2,6 +2,7 @@ import json
 import logging
 from datetime import datetime, timedelta
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from influxdb_client import InfluxDBClient
 from fastapi.openapi.utils import get_openapi
@@ -14,6 +15,14 @@ logging.basicConfig(level=logging.INFO,
 
 # Initialize FastAPI
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
 
 # Initialize InfluxDB client
 influxdb_client = InfluxDBClient(url=secret.INFLUX_URL,
@@ -56,6 +65,8 @@ async def get_bus_location():
                 buses_location[bus_id]["lat"] = record.values["_value"]
             elif record.values["_field"] == "lon":
                 buses_location[bus_id]["lon"] = record.values["_value"]
+
+    buses_location = clean_dictionary(buses_location)
 
     response = JSONResponse(content=buses_location)
     response.media_type = "application/json"
@@ -108,7 +119,8 @@ def clean_dictionary(buses_location):
     """
     keys_to_remove = []
     for key, value in buses_location.items():
-        if value["lat"] is None or value["lon"] is None or value["next_stop"] == 0:
+        if (value["lat"] is None or value["lon"] is None
+            or ('next_stop' in value and value["next_stop"] == 0)):
             keys_to_remove.append(key)
 
     for key in keys_to_remove:

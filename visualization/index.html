@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+    <title>Map</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.43/esri/css/esri.css">
+    <style>
+      html, body, #esri-map-container {
+        padding: 0px;
+        margin: 0px;
+        height: 100%;
+      }
+    </style>
+   <script src="https://js.arcgis.com/3.43/"></script>
+   <script>
+     require([
+       "./script.js"
+     ], function() {});
+   </script>
+  </head>
+
+  <body>
+    <div id="esri-map-container"></div>
+  </body>
+</html>
