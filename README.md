@@ -22,6 +22,10 @@ The program uses a robust and reliable system to collect, process, and deliver r
 ![Demonstration of the program:](assets/demonstration1.gif)  
   
 ![Demonstration of the program:](assets/demonstration3.gif)  
+
+This program displays both all bus locations and buses near specified coordinates. You can find the respective pages for these features in the "visualization" and "visualization_near" folders.
+
+![Demonstration of the program:](assets/demo_v.gif)  
   
   
 ### 3. Launch  

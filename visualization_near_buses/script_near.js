@@ -41,42 +41,43 @@ define([
     }
   
     function displayBuses(map, busLocations) {
-        const busIconUrl = "./bus.png";
-        const markerSymbol = new PictureMarkerSymbol(busIconUrl, 32, 32);
+      const busIconUrl = "./bus.png";
+      const markerSymbol = new PictureMarkerSymbol(busIconUrl, 32, 32);
     
-        map.graphics.clear();
-
-        for (const busId in busLocations) {
-          const busLocation = busLocations[busId];
-          const point = new Point(busLocation.lon, busLocation.lat);
-          const attributes = {
-            'id': busId,
-            'lon': busLocation.lon,
-            'lat': busLocation.lat,
-            'next_stop': busLocation.next_stop,
-          };
-          const popupTemplate = new PopupTemplate({
-            title: 'Bus {id}',
-            next_stop: "Next stop {next_stop}"
-          })
-          const graphic = new Graphic(point, markerSymbol, attributes, popupTemplate);
-          map.graphics.add(graphic);
-        }
+      map.graphics.clear();
+    
+      for (const busId in busLocations) {
+        const busLocation = busLocations[busId];
+        const point = new Point(busLocation.lon, busLocation.lat);
+        const attributes = {
+          'id': busId,
+          'lon': busLocation.lon,
+          'lat': busLocation.lat,
+          'next_stop': busLocation.next_stop,
+        };
+        const popupTemplate = new PopupTemplate({
+          title: 'Bus {id}, next stop {next_stop}',
+        });
+        const graphic = new Graphic(point, markerSymbol, attributes);
+        graphic.setInfoTemplate(popupTemplate);
+        map.graphics.add(graphic);
       }
+    }
+    
   
-      on(dom.byId("submit-coordinates"), "click", async function () {
-        const lat = parseFloat(dom.byId("latitude").value);
-        const lon = parseFloat(dom.byId("longitude").value);
-      
-        if (!isNaN(lat) && !isNaN(lon)) {
-          const busLocations = await fetchBusLocations(lat, lon);
-          displayBuses(map, busLocations);
-          
-          map.centerAt(new Point(lon, lat));
-      
-        } else {
-          alert("Please, try it again. The coordinates may have been entered incorrectly.");
-        }
-      });
+    on(dom.byId("submit-coordinates"), "click", async function () {
+      const lat = parseFloat(dom.byId("latitude").value);
+      const lon = parseFloat(dom.byId("longitude").value);
+    
+      if (!isNaN(lat) && !isNaN(lon)) {
+        const busLocations = await fetchBusLocations(lat, lon);
+        displayBuses(map, busLocations);
+        
+        map.centerAt(new Point(lon, lat));
+    
+      } else {
+        alert("Please, try it again. The coordinates may have been entered incorrectly.");
+      }
+    });
   });
  
