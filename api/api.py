@@ -189,6 +189,13 @@ async def get_bus_location(lat: float, lon: float):
 
     # Clearing the dictionary
     buses_location = clean_dictionary(buses_location)
+    keys_to_remove = []
+    for key, value in buses_location.items():
+        if value["lat"] is None or value["lon"] is None:
+            keys_to_remove.append(key)
+
+    for key in keys_to_remove:
+        buses_location.pop(key)
 
     response = JSONResponse(content=buses_location)
     response.media_type = "application/json"

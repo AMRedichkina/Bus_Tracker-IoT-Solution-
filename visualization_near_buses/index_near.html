@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+    <title>Map</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.43/esri/css/esri.css">
+    <link rel="stylesheet" href="styles.css">
+    <script>
+      var dojoConfig = {
+        async: true,
+        packages: [
+          {
+            name: "visualization_near_buses",
+            location: location.pathname.replace(/\/[^/]+$/, "") + "/visualization_near_buses"
+          }
+        ]
+      };
+    </script>
+    <script src="https://js.arcgis.com/3.43/"></script>
+    <script>
+      require([
+        "./script_near.js"
+      ], function() {});
+    </script>
+  </head>
+
+  <body>
+    <div id="coordinates-input">
+      <label for="latitude">Latitude: </label>
+      <input type="number" step="any" id="latitude" placeholder="latitude">
+      <br>
+      <label for="longitude">Longitude: </label>
+      <input type="number" step="any" id="longitude" placeholder="Longitude">
+      <br>
+      <button id="submit-coordinates">Send to see buses near</button>
+    </div>
+    <div id="esri-map-container"></div>
+  </body>
+</html>
